@@ -1,0 +1,7 @@
+export { default as Main } from './Main'
+export { default as LogIn } from './LogIn'
+export { default as SignUp } from './SignUp'
+export { default as Category } from './Category'
+export { default as SingleProduct } from './SingleProduct'
+export { default as MainTray } from './MainTray'
+export { default as Checkout } from './Checkout'

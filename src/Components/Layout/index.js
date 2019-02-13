@@ -1,0 +1,5 @@
+export { default as LayoutCategory } from './LayoutCategory'
+export { default as MainLayout } from './MainLayout'
+export { default as LayoutRoute } from './LayoutRoute'
+export { default as LayoutSingle } from './LayoutSingle'
+export { default as LayoutRoutePrivate } from './LayoutRoutePrivate'
