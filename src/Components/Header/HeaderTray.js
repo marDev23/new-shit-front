@@ -30,10 +30,10 @@ class HeaderTray extends Component {
               <Grid.Column>
                 <Menu fluid vertical>
                   <Menu.Item position='right'>
-                    <Button as={Link} color='orange' to='/animation'>
+                    <Button as={Link} color='orange' to='/log_in'>
                       Log In
                     </Button>
-                    <Button as={Link} to='/animation' style={{ marginLeft: '0.5em' }}>
+                    <Button as={Link} to='/sign_up' style={{ marginLeft: '0.5em' }}>
                       Sign Up
                     </Button>
                   </Menu.Item>
@@ -69,10 +69,10 @@ class HeaderTray extends Component {
                     <Grid.Column>
                       <Menu fluid vertical borderless compact>
                         <Menu.Item>
-                          <Button fluid as={Link}  to='/animation'>
+                          <Button fluid as={Link}  to='/tray'>
                            View Tray
                           </Button>
-                          <Button fluid as={Link} color='orange' to='/animation' style={{ marginTop: '0.5em' }}>
+                          <Button fluid as={Link} to='/checkout' color='orange' style={{ marginTop: '0.5em' }}>
                             Checkout
                           </Button>
                         </Menu.Item>

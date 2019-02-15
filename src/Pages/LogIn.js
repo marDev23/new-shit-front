@@ -1,7 +1,9 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import { Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
 import { Button, Form, Grid, Header, Image, Message, Segment } from 'semantic-ui-react'
+import { Redirect } from 'react-router-dom'
+// import LogInError from './LogInError'
 import LogoCircle from '../main_logo_mobile.png'
 
 const logInMutation = gql`
@@ -13,19 +15,16 @@ const logInMutation = gql`
 class LogIn extends Component {
   state={
     email: '',
-    password: ''
+    password: '',
+    visible: false,
   }
-
-  updateEmail = ({ target: { value } }) => {
-    this.setState({ email: value })
-  }
-
-  updatePassword = ({ target: { value } }) => {
-    this.setState({ password: value })
-  }
+  updateEmail = ({ target: { value } }) => { this.setState({ email: value }) }
+  updatePassword = ({ target: { value } }) => { this.setState({ password: value }) }
+  handleDismiss = () => { this.setState({ visible: false }) }
 
   render() {
-    const { email, password } = this.state
+    const { email, password, visible } = this.state
+    const { location, match, history } = this.props
     return (
       <div className='login-form'>
         {/*
@@ -46,43 +45,53 @@ class LogIn extends Component {
               <Image src={LogoCircle} /> Log-in to your account
             </Header>
             <Mutation mutation={logInMutation}>
-              {(signIn, { loading, error }) => (
-                <Form
-                  size='large'
-                  onSubmit={evt => {
-                    evt.preventDefault();
-                    signIn({
-                      variables: {
-                        email,
-                        password
-                      }
-                    })
-                  }}
-                >
-                  <Segment stacked>
-                    <Form.Input
-                      name='name'
-                      fluid
-                      icon='user'
-                      iconPosition='left'
-                      placeholder='E-mail Address'
-                      onChange={this.updateEmail}
-                    />
-                    <Form.Input
-                      fluid
-                      name='password'
-                      icon='lock'
-                      iconPosition='left'
-                      placeholder='Password'
-                      type='password'
-                      onChange={this.updatePassword}
-                    />
+              {(signIn, { error, loading, data }) => (
+                <Fragment>
+                  <Form
+                    size='large'
+                    onSubmit={evt => {
+                      evt.preventDefault();
+                      signIn({
+                        variables: {
+                          email,
+                          password
+                        }
+                      })
+                    }}
+                  >
+                    <Segment stacked>
+                      <Form.Input
+                        name='name'
+                        fluid
+                        icon='user'
+                        iconPosition='left'
+                        placeholder='E-mail Address'
+                        onChange={this.updateEmail}
+                      />
+                      <Form.Input
+                        fluid
+                        name='password'
+                        icon='lock'
+                        iconPosition='left'
+                        placeholder='Password'
+                        type='password'
+                        onChange={this.updatePassword}
+                      />
 
-                    <Button type='submit' color='orange' fluid size='large'>
-                      Log In
-                    </Button>
-                  </Segment>
-                </Form>
+                      <Button type='submit' color='orange' fluid size='large'>
+                        Log In
+                      </Button>
+                    </Segment>
+                  </Form>
+                  { loading && <p>Loading...</p>}
+                  { error && 
+                    <Message
+                    error
+                    header='Error Signing In'
+                    list={error.graphQLErrors.map(x => x.message)}
+                  /> }
+                  {data && <Redirect to='/' /> }
+                  </Fragment>
               )}
             </Mutation>
             <Message>

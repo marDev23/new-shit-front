@@ -1,32 +1,49 @@
 import React from 'react'
 import { Button } from 'semantic-ui-react'
-import { Mutation } from 'react-apollo'
-import { ADD_TO_CART } from '../../QUERIES/ALL_QUERIES'
+import { Mutation, Query } from 'react-apollo'
+import { withRouter } from 'react-router-dom'
+import { ADD_TO_CART, IS_SIGNED } from '../../QUERIES/ALL_QUERIES'
 
-const AddToButton = ({...props}) => (
-<Mutation mutation={ADD_TO_CART}>
-	{( addToCart, { loading, data, error }) => (
-    <Button
-    	color='orange'
-        inverted
-        fluid
-        size='small'
-    	disabled={props.isQuantityEmpty ? true : false}
-    	onClick={evt => {
-    		console.log(data)
-    		evt.preventDefault();
-    		addToCart({
-    			variables: {
-    				productId: props.id,
-    				quantity: props.inputQuantity
-    			}
-    		})
-    	}}
-    > Add To Tray
-    </Button>
-	)}
-</Mutation>
-// console.log(props)
+
+const AddToButton = withRouter(({...props}) => {
+    console.log(props)
+    return (
+    <Query query={IS_SIGNED}>
+    {({ loading, data: { isSignIn }, error }) => {
+        if (loading) return ''
+        return (
+            <Mutation mutation={ADD_TO_CART}>
+            	{( addToCart, { loading, data, error }) => (
+                <Button
+                	color='orange'
+                    inverted
+                    fluid
+                    size='small'
+                	disabled={props.isQuantityEmpty}
+                	onClick={evt => {
+                		evt.preventDefault();
+                        if (isSignIn === false) {
+                           props.history.push({
+                            pathname: '/log_in',
+                            state: { from: `${props.match.url}` }
+                           })
+                        }
+                		addToCart({
+                			variables: {
+                				productId: props.id,
+                				quantity: props.inputQuantity
+                			}
+                		})
+                	}}
+                > Add To Tray
+                </Button>
+            	)}
+            </Mutation>
+        )
+    }}
+    </Query>
 )
+})
+
 
 export default AddToButton

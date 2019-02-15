@@ -70,7 +70,7 @@ class SignUp extends Component {
                 </Button>
               </Segment>
             </Form>
-          <Message color='orange'>
+          <Message>
             Already have an account? <a href='/log_in'>Log In</a>
           </Message>
         </Grid.Column>

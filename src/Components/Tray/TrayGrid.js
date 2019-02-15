@@ -1,22 +1,20 @@
 import React, { Component, Fragment } from 'react'
-import { Grid, Loader, Header, Menu, Accordion, Icon, Form, Dropdown } from 'semantic-ui-react'
+import { Grid, Loader, Header, Menu, Accordion, Icon, Form, Dropdown, Button } from 'semantic-ui-react'
+import { Link } from 'react-apollo'
 import { Query } from 'react-apollo'
 import { MY_CART, ALL_ADDRESS } from '../../QUERIES/ALL_QUERIES'
 import HeaderTrayItem from './HeaderTrayItem'
 
 const subTotal = (arr) => {
   return arr.reduce((sum, i) => {
-    let n = sum + (i.product.price * i.quantity)
-    return n.toLocaleString()
+    return sum + (i.product.price * i.quantity)
   }, 0)
 }
 
 const grandTotal = (arr, hit) => {
   return arr.reduce((sum, i) => {
-    let n = sum + (i.product.price * i.quantity)
-    let m = n + parseInt(hit)
-    return m.toLocaleString()
-  }, 0)
+    return sum + (i.product.price * i.quantity)
+  }, 0) + parseInt(hit)
 }
 
 
@@ -139,7 +137,7 @@ class TrayGrid extends Component {
 						          TOTAL
 						          <Menu.Menu>
 						            <Menu.Item>
-						              Sub-Total: <Header color='orange' size='small'>P {subTotal(data.cart)}</Header>
+						              Sub-Total: <Header color='orange' size='small'>P {subTotal(data.cart).toLocaleString()}</Header>
 						            </Menu.Item>
 						            <Menu.Item>
 						              Delivey Fee: <Header color='orange' size='small'>
@@ -154,7 +152,7 @@ class TrayGrid extends Component {
 						          </Menu.Menu>
 						        </Menu.Item>
 						        <Menu.Item>
-						          Total: <Header color='orange' size='small'>P {grandTotal(data.cart, deliveryFee)}</Header>
+						          Total: <Header color='orange' size='small'>P {grandTotal(data.cart, deliveryFee).toLocaleString()}</Header>
 						        </Menu.Item>
 						    </Menu>
 						    </Form>
@@ -163,6 +161,28 @@ class TrayGrid extends Component {
 						    ''
 					    }
 				    </Grid.Row>
+				    {
+				    	isEmpty
+				    	? ''
+
+				    	:
+						<Grid.Row>
+		                    <Grid.Column width={12}>
+		                      <Menu widths={2} borderless compact>
+		                        <Menu.Item>
+		                          <Button as={Link}  to='/animation'>
+		                           Back To Home
+		                          </Button>
+		                        </Menu.Item>
+		                        <Menu.Item>
+		                          <Button as={Link} color='orange' to='/animation'>
+		                            Checkout
+		                          </Button>
+		                        </Menu.Item>
+		                      </Menu>
+		                    </Grid.Column>
+		                </Grid.Row>
+	                }
 				    </Fragment>
 		      	)
 			}}

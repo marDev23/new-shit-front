@@ -15,10 +15,10 @@ const NavProfile = ({...props}) => (
           props.dataBoolean
           ? 
           <Menu.Item position='right'>
-            <Button as={Link} color='orange' to='/animation'>
+            <Button as={Link} color='orange' to='/log_in'>
               Log In
             </Button>
-            <Button as={Link} to='/animation' style={{ marginLeft: '0.5em' }}>
+            <Button as={Link} to='/sign_up' style={{ marginLeft: '0.5em' }}>
               Sign Up
             </Button>
           </Menu.Item>

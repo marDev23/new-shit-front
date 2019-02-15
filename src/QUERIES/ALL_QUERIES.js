@@ -204,3 +204,15 @@ query OrderType($id: ID!){
   }
 }
 `
+export const PLACE_ORDER = gql `
+mutation placeOrder($orderTypeId: ID!, $datePlaced: Date, $datePickUp: Date, $addressId: ID!, $input: [OrderItemInput]) {
+  placeOrder(
+    orderTypeId: $orderTypeId,
+    datePlaced: $datePlaced,
+    datePickUp: $datePickUp
+    addressId: $addressId,
+    input: $input) {
+    number
+  }
+}
+`

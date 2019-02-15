@@ -20,24 +20,6 @@ class MainTray extends Component {
 				<Grid container stackable>
 				   <TrayGrid />
 				</Grid>
-				<Grid container stackable>
-					<Grid.Row>
-                    <Grid.Column width={12}>
-                      <Menu widths={2} borderless compact>
-                        <Menu.Item>
-                          <Button as={Link}  to='/animation'>
-                           Back To Home
-                          </Button>
-                        </Menu.Item>
-                        <Menu.Item>
-                          <Button as={Link} color='orange' to='/animation'>
-                            Checkout
-                          </Button>
-                        </Menu.Item>
-                      </Menu>
-                    </Grid.Column>
-                    </Grid.Row>
-                </Grid>
 			</Segment>
 		)
 	}

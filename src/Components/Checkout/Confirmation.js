@@ -1,7 +1,9 @@
 import React, { Component, Fragment } from 'react'
 import { Form, Divider, Container, Button, Menu, Header } from 'semantic-ui-react'
+import { Redirect } from 'react-router-dom'
 import { Query, Mutation } from 'react-apollo'
-import { ALL_CART, ADDRESS, ORDER_TYPE } from '../../QUERIES/ALL_QUERIES'
+import dayjs from 'dayjs'
+import { ALL_CART, ADDRESS, ORDER_TYPE, PLACE_ORDER } from '../../QUERIES/ALL_QUERIES'
 
 const ProductConfirm = ({tray}) => (
     <Menu.Item>
@@ -20,16 +22,16 @@ const ProductConfirm = ({tray}) => (
 const subTotal = (arr) => {
   return arr.reduce((sum, i) => {
     let n = sum + (i.product.price * i.quantity)
-    return n.toLocaleString()
+    return n
   }, 0)
 }
 
-const grandTotal = (arr, hit) => {
+const grandTotal = (arr, fee) => {
   return arr.reduce((sum, i) => {
+    console.log(sum)
     let n = sum + (i.product.price * i.quantity)
-    let m = n + parseInt(hit)
-    return m.toLocaleString()
-  }, 0)
+    return n
+  }, 0) + parseInt(fee)
 }
 
 class Confirmation extends Component{
@@ -40,6 +42,7 @@ class Confirmation extends Component{
 
     render() {
         const { delivery } = this.props
+        console.log(delivery.deliveryOption)
         return(
             <Form>
             <Menu fluid vertical>
@@ -50,7 +53,6 @@ class Confirmation extends Component{
                     <Query query={ALL_CART}>
                         {({ loading, data}) => {
                             if (loading) return ''
-                            console.log(data)
                             return (
                                 <Fragment>
                                 {data.cart.map(x => (
@@ -94,22 +96,23 @@ class Confirmation extends Component{
                                             if (loadingDOption) return ''
                                             if (loadingACart) return ''
                                             if (loadingAShipment) return ''
+                                            console.log(dayjs(Date.now()).format('MM-DD-YYYY,hh:mm A'))
                                             if (orderType.type === 'for-delivery') {
                                                 return (
                                                     <Fragment>
                                                     <Menu.Item>ORDER TYPE: {orderType.type.toUpperCase()}</Menu.Item>
-                                                    <Menu.Item>TOTAL: P {subTotal(cart)}</Menu.Item>
+                                                    <Menu.Item>TOTAL: P {subTotal(cart).toLocaleString()}</Menu.Item>
                                                     <Menu.Item>DELIVERY FEE: P {address.fee.toLocaleString()}</Menu.Item>
-                                                    <Menu.Item>GRAND TOTAL: P {grandTotal(cart, address.fee)}</Menu.Item>
+                                                    <Menu.Item>GRAND TOTAL: P {grandTotal(cart, address.fee).toLocaleString()}</Menu.Item>
                                                     </Fragment>
                                                 )
                                             }
                                             return (
                                                 <Fragment>
                                                 <Menu.Item>ORDER TYPE: {orderType.type.toUpperCase()}</Menu.Item>
-                                                <Menu.Item>TOTAL: P {subTotal(cart)}</Menu.Item>
+                                                <Menu.Item>TOTAL: P {subTotal(cart).toLocaleString()}</Menu.Item>
                                                 <Menu.Item>DELIVERY FEE:</Menu.Item>
-                                                <Menu.Item>GRAND TOTAL: P {subTotal(cart)}</Menu.Item>
+                                                <Menu.Item>GRAND TOTAL: P {subTotal(cart).toLocaleString()}</Menu.Item>
                                                 </Fragment>
                                             )
                                         }}
@@ -124,16 +127,42 @@ class Confirmation extends Component{
             <Divider hidden />
             <Container>
                 <Query query={ALL_CART}>
-                    {({ loading, data}) => {
+                    {({ loading, data: { cart }}) => {
                       if (loading) return ''  
                         return (
-
+                            <Mutation mutation={PLACE_ORDER}>
+                            {( placeOrder, { loading: dataLoading, data}) => {
+                                if (dataLoading) return ''
+                                if (data) {
+                                    return <Redirect to={{
+                                        pathname: '/thank_you',
+                                        state: { id: data.placeOrder.number }
+                                    }} />
+                                }
+                                return (
                                 <Button 
-                                    fluid 
-                                    disabled
-                                    color='orange'>
+                                    fluid
+                                    color='orange'
+                                    onClick={evt => {
+                                        evt.preventDefault();
+                                        const datePlaced = dayjs(Date.now()).format('MM-DD-YYYY,hh:mm A')
+                                        const input = cart.map(x => ({ id: x.id, productId: x.product.id, quantity: x.quantity, price: x.product.price }))
+                                        placeOrder({
+                                            variables: {
+                                                orderTypeId: delivery.deliveryOption,
+                                                datePlaced: datePlaced,
+                                                datePickUp: delivery.dateTime,
+                                                addressId: delivery.addressId,
+                                                input: input
+                                            }
+                                        })
+
+                                    }}>
                                     Submit
                                 </Button>
+                                )
+                            }}
+                            </Mutation>
                         )
                     }}
                 </Query>
