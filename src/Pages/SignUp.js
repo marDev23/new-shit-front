@@ -28,24 +28,28 @@ class SignUp extends Component {
               <Segment stacked>
                 <Form.Input 
                 fluid
+                size='small'
                 name='name'
                 icon='user'
                 iconPosition='left'
                 placeholder='Full Name' />
                 <Form.Input 
                 fluid
+                size='small'
                 name='email'
                 icon='mail'
                 iconPosition='left'
                 placeholder='E-mail address' />
                 <Form.Input 
                 fluid
+                size='small'
                 name='mobile'
                 icon='mobile'
                 iconPosition='left'
                 placeholder='Mobile Number' />
                 <Form.Input
                   fluid
+                  size='small'
                   name='password'
                   icon='lock'
                   iconPosition='left'
@@ -54,6 +58,7 @@ class SignUp extends Component {
                 />
                 <Form.Input
                   fluid
+                  size='small'
                   name='confirmPassword'
                   icon='user secret'
                   iconPosition='left'
@@ -64,8 +69,9 @@ class SignUp extends Component {
                  size='large'
                  name='terms'
                  fluid='true'
+                 width={12}
                  label='I agree to the Terms of Service and Privacy Policy' />
-                <Button color='orange' fluid size='large'>
+                <Button color='orange' fluid size='small'>
                   Sign Up
                 </Button>
               </Segment>

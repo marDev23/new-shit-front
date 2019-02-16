@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react'
 import { Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
 import { Button, Form, Grid, Header, Image, Message, Segment } from 'semantic-ui-react'
-import { Redirect } from 'react-router-dom'
+import { Redirect, Link } from 'react-router-dom'
 // import LogInError from './LogInError'
 import LogoCircle from '../main_logo_mobile.png'
 
@@ -42,7 +42,7 @@ class LogIn extends Component {
         <Grid textAlign='center' style={{ height: '100%' }} verticalAlign='middle'>
           <Grid.Column style={{ maxWidth: 450 }}>
             <Header as='h2' color='orange' textAlign='center'>
-              <Image src={LogoCircle} /> Log-in to your account
+              <Image as={Link} to={'/'} src={LogoCircle} /> Log-in to your account
             </Header>
             <Mutation mutation={logInMutation}>
               {(signIn, { error, loading, data }) => (
@@ -63,6 +63,7 @@ class LogIn extends Component {
                       <Form.Input
                         name='name'
                         fluid
+                        size='small'
                         icon='user'
                         iconPosition='left'
                         placeholder='E-mail Address'
@@ -70,6 +71,7 @@ class LogIn extends Component {
                       />
                       <Form.Input
                         fluid
+                        size='small'
                         name='password'
                         icon='lock'
                         iconPosition='left'
@@ -78,7 +80,7 @@ class LogIn extends Component {
                         onChange={this.updatePassword}
                       />
 
-                      <Button type='submit' color='orange' fluid size='large'>
+                      <Button type='submit' color='orange' fluid size='small'>
                         Log In
                       </Button>
                     </Segment>
